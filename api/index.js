@@ -1,15 +1,20 @@
+import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
-import dotenv from "dotenv";
 import userRoutes from "./routes/user.route.js";
+import authRoutes from "./routes/auth.route.js";
 
-dotenv.config();
+dotenv.config(); // Load environment variables from .env file
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+app.use(express.json());
+const PORT = 3000;
 
 mongoose
-  .connect(process.env.MONGO)
+  .connect(
+    "mongodb+srv://sanya:sanya@mern-blog.ibpim0c.mongodb.net/?retryWrites=true&w=majority"
+  )
+
   .then(() => {
     console.log("MongoDB connected");
     app.listen(PORT, () => {
@@ -20,5 +25,5 @@ mongoose
     console.error("MongoDB connection failed:", err.message);
   });
 
-// Mount the userRoutes onto /api/user
 app.use("/api/user", userRoutes);
+app.use("/api/auth", authRoutes);
